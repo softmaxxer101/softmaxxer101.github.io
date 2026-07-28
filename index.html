@@ -486,7 +486,7 @@
           <span class="project-path">~/projects/${slugify(p.title)}</span>
           <span class="project-title">${escapeHTML(p.title)}</span>
           <p class="project-desc">${escapeHTML(p.description)}</p>
-          <div class="project-tags">${p.tags.map(t => `<span>${escapeHTML(t)}</span>`).join('')}</div>
+          <div class="project-tags">${(p.tags || []).map(t => `<span>${escapeHTML(t)}</span>`).join('')}</div>
           <div class="project-link-row">View project ${arrowIcon}</div>
         </a>
       `).join('');
