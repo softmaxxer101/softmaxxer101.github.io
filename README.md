@@ -94,3 +94,4 @@ mailto hand-off.
 - The page grid, red margin rule, punch holes and spiral rings are pure CSS.
 - Every page is measured to fit its 544×756 sheet with no clipping — if you add
   copy and something looks cut off, that is the reason.
+# softmaxxer101.github.io
