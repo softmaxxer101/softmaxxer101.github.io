@@ -668,3 +668,59 @@ html[data-theme="dark"] .quietnav a{border-color:rgba(255,255,255,.3)}
 html[data-theme="dark"] .letter input,html[data-theme="dark"] .letter textarea{border-color:rgba(255,255,255,.22);color:var(--ink)}
 html[data-theme="dark"] .letter input::placeholder,html[data-theme="dark"] .letter textarea::placeholder{color:#7d776e}
 
+/* ---------------- road · the featured lab ---------------- */
+.roadfeat{
+  margin-top:12px;padding:13px 14px 12px;border-radius:9px;position:relative;
+  background:linear-gradient(160deg,#fdf7de,#f7e8a5);
+  border:1px solid rgba(28,29,33,.1);border-left:3px solid var(--red);
+  box-shadow:0 6px 14px -14px rgba(60,44,20,.9);
+}
+.rf-top{display:flex;align-items:center;justify-content:space-between;gap:8px}
+.rf-when{font-family:var(--f-mono);font-size:9px;letter-spacing:.1em;color:#6a5a1f}
+.roadfeat h3{
+  margin:7px 0 0;font-family:var(--f-serif);font-size:19px;font-weight:600;
+  letter-spacing:-.01em;line-height:1.15;display:flex;align-items:center;gap:7px;
+}
+.roadfeat .meta{
+  margin:3px 0 0;font-family:var(--f-mono);font-size:9px;letter-spacing:.05em;
+  text-transform:uppercase;color:#7a5a12;
+}
+.roadfeat .ticks{margin-top:7px;gap:3px}
+.roadfeat .ticks li{font-size:11.5px;line-height:1.34;padding-left:14px;color:#3d3a35}
+.roadfeat .ticks li::before{top:6px;width:4px;height:4px}
+.roadlinks{
+  display:flex;flex-wrap:wrap;gap:6px 13px;margin-top:9px;padding-top:8px;
+  border-top:1px dashed rgba(28,29,33,.18);
+}
+.roadlinks a{
+  font-family:var(--f-mono);font-size:10px;letter-spacing:.04em;text-decoration:none;
+  color:#12403c;border-bottom:1px solid rgba(18,64,60,.35);padding-bottom:1px;
+  transition:color .2s,border-color .2s;
+}
+.roadlinks a:hover{color:var(--red);border-color:var(--red)}
+.joblist.road h3 .badge{font-size:8px;padding:1px 5px}
+.roadmini{margin:4px 0 0;font-family:var(--f-mono);font-size:9.5px;letter-spacing:.04em;color:var(--grey)}
+.roadmini a{color:var(--red);text-decoration:none;border-bottom:1px dotted rgba(179,0,27,.5)}
+.roadmini a:hover{border-bottom-style:solid}
+
+/* hardware rows now carry a note each */
+.hwrow{flex-direction:column;align-items:flex-start;gap:9px}
+.hwrow li>div b{display:block}
+.hwrow li>div span{
+  display:block;font-family:var(--f-mono);font-size:9.5px;letter-spacing:.04em;
+  color:var(--grey);margin-top:1px;
+}
+.hwnote{margin-top:10px;font-size:12px;line-height:1.5;color:var(--grey)}
+.pv .tag.feat{background:var(--yellow);color:#5a4712}
+
+html[data-theme="dark"] .roadfeat{background:linear-gradient(160deg,#3b3624,#2c2a1f);border-color:rgba(255,255,255,.1)}
+html[data-theme="dark"] .rf-when{color:#cbbf8a}
+html[data-theme="dark"] .roadfeat .meta{color:#c9b271}
+html[data-theme="dark"] .roadfeat .ticks li{color:#c9c3ba}
+html[data-theme="dark"] .roadlinks{border-color:rgba(255,255,255,.14)}
+html[data-theme="dark"] .roadlinks a{color:#9fd8d3;border-color:rgba(159,216,211,.4)}
+html[data-theme="dark"] .pv .tag.feat{background:#4a4222;color:#f0dda4}
+
+/* keep the home page inside its sheet */
+.polaroid.mini .ph{height:128px}
+

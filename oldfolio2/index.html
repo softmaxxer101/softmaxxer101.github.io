@@ -1,0 +1,268 @@
+<!doctype html>
+<html lang="en" data-theme="light">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>𝒶𝓁𝒾𝓈 · inference journal</title>
+<meta name="description" content="alis — I build and re-implement LLM inference systems. Attention mechanisms, memory management, serving engines, on a single RTX 3050.">
+<meta name="theme-color" content="#ece7dd">
+<meta name="color-scheme" content="light dark">
+<link rel="canonical" href="https://softmaxxer101.github.io/">
+<meta property="og:title" content="𝒶𝓁𝒾𝓈 · inference journal">
+<meta property="og:description" content="alis — I build and re-implement LLM inference systems. Attention mechanisms, memory management, serving engines.">
+<meta property="og:type" content="website">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:site" content="@import_alis">
+<meta name="twitter:creator" content="@import_alis">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,100..900;1,9..144,100..900&family=Hanken+Grotesk:ital,wght@0,100..900;1,100..900&family=Caveat:wght@400..700&family=JetBrains+Mono:ital,wght@0,100..800;1,100..800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="styles.css?v=24">
+<script>try{if(localStorage.getItem('alis-theme')==='dark')document.documentElement.setAttribute('data-theme','dark')}catch(e){}</script>
+<script type="application/ld+json">
+{"@context":"https://schema.org","@type":"Person","name":"alis","alternateName":"𝒶𝓁𝒾𝓈","url":"https://softmaxxer101.github.io/","jobTitle":"LLM Inference Engineer","description":"Self-taught LLM systems engineer re-implementing modern inference techniques from first principles.","sameAs":["https://github.com/softmaxxer101","https://x.com/import_alis","https://huggingface.co/softmaxxer101"]}
+</script>
+</head>
+<body>
+
+<svg class="sprite" aria-hidden="true"><defs>
+<symbol id="i-chip" viewBox="0 0 24 24"><rect x="7" y="7" width="10" height="10" rx="2"/><rect x="10.5" y="10.5" width="3" height="3" rx=".6" fill="currentColor" stroke="none"/><path d="M10 3v3M14 3v3M10 18v3M14 18v3M3 10h3M3 14h3M18 10h3M18 14h3"/></symbol>
+<symbol id="i-terminal" viewBox="0 0 24 24"><rect x="2.5" y="4" width="19" height="16" rx="2.5"/><path d="M6.5 9.5 9.5 12l-3 2.5M12 15h5"/></symbol>
+<symbol id="i-layers" viewBox="0 0 24 24"><path d="M12 3 3 7.5l9 4.5 9-4.5L12 3Z"/><path d="m3 12.2 9 4.5 9-4.5M3 16.7l9 4.5 9-4.5"/></symbol>
+<symbol id="i-grid" viewBox="0 0 24 24"><rect x="3" y="3" width="18" height="18" rx="2"/><path d="M9 3v18M15 3v18M3 9h18M3 15h18"/></symbol>
+<symbol id="i-gauge" viewBox="0 0 24 24"><path d="M4 18a8 8 0 1 1 16 0"/><path d="m12 14 4-4"/><circle cx="12" cy="18" r="1.2" fill="currentColor" stroke="none"/></symbol>
+<symbol id="i-bolt" viewBox="0 0 24 24"><path d="M13 2 4.5 13.5H11l-1 8.5L18.5 10H12l1-8Z"/></symbol>
+<symbol id="i-globe" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="M3 12h18M12 3c2.6 2.6 2.6 15.4 0 18-2.6-2.6-2.6-15.4 0-18Z"/></symbol>
+<symbol id="i-music" viewBox="0 0 24 24"><path d="M9 18V6l10-2v12"/><circle cx="6.5" cy="18" r="2.5"/><circle cx="16.5" cy="16" r="2.5"/></symbol>
+<symbol id="i-book" viewBox="0 0 24 24"><path d="M4 4.5A2.5 2.5 0 0 1 6.5 2H20v18H6.5A2.5 2.5 0 0 0 4 22V4.5Z"/><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"/></symbol>
+<symbol id="i-pen" viewBox="0 0 24 24"><path d="M15.5 3.5 20.5 8.5 9 20H4v-5L15.5 3.5Z"/><path d="m14 5 5 5"/></symbol>
+<symbol id="i-branch" viewBox="0 0 24 24"><circle cx="6" cy="6" r="2.5"/><circle cx="6" cy="18" r="2.5"/><circle cx="18" cy="9" r="2.5"/><path d="M6 8.5v7M8.5 6H13a2.5 2.5 0 0 1 2.5 2.5V7"/></symbol>
+<symbol id="i-doc" viewBox="0 0 24 24"><path d="M6 2.5h8L19 7.5v14H6v-19Z"/><path d="M14 2.5v5h5M9 13h7M9 17h5"/></symbol>
+<symbol id="i-brain" viewBox="0 0 24 24"><path d="M9.5 4A3.5 3.5 0 0 0 6 7.5 3 3 0 0 0 4.5 13 3 3 0 0 0 6.5 18 3 3 0 0 0 12 20V4.8A2 2 0 0 0 9.5 4Z"/><path d="M14.5 4A3.5 3.5 0 0 1 18 7.5a3 3 0 0 1 1.5 5.5 3 3 0 0 1-2 5A3 3 0 0 1 12 20"/></symbol>
+<symbol id="i-db" viewBox="0 0 24 24"><ellipse cx="12" cy="6" rx="8" ry="3.2"/><path d="M4 6v12c0 1.8 3.6 3.2 8 3.2s8-1.4 8-3.2V6M4 12c0 1.8 3.6 3.2 8 3.2s8-1.4 8-3.2"/></symbol>
+<symbol id="i-rocket" viewBox="0 0 24 24"><path d="M14 4c4 0 6 2 6 6 0 5-4 8-8 10l-2-2c2-4 5-8 10-8"/><path d="m8 12 4 4M6 14l-2 2 1 3 3 1 2-2"/><circle cx="15.5" cy="8.5" r="1.3" fill="currentColor" stroke="none"/></symbol>
+<symbol id="i-monitor" viewBox="0 0 24 24"><rect x="2.5" y="4" width="19" height="12.5" rx="2"/><path d="M9 20h6M12 16.5V20"/></symbol>
+<symbol id="i-keyboard" viewBox="0 0 24 24"><rect x="2" y="6" width="20" height="12" rx="2"/><path d="M6 10h.01M10 10h.01M14 10h.01M18 10h.01M6 14h12"/></symbol>
+<symbol id="i-mouse" viewBox="0 0 24 24"><rect x="6" y="2.5" width="12" height="19" rx="6"/><path d="M12 6.5v4"/></symbol>
+<symbol id="i-headphones" viewBox="0 0 24 24"><path d="M4 14v-2a8 8 0 0 1 16 0v2"/><rect x="2.5" y="13.5" width="4.5" height="7" rx="2"/><rect x="17" y="13.5" width="4.5" height="7" rx="2"/></symbol>
+<symbol id="i-mic" viewBox="0 0 24 24"><rect x="9" y="2.5" width="6" height="11" rx="3"/><path d="M5.5 11a6.5 6.5 0 0 0 13 0M12 17.5V21M9 21h6"/></symbol>
+<symbol id="i-bulb" viewBox="0 0 24 24"><path d="M9 17h6M10 21h4"/><path d="M12 2.5a6.5 6.5 0 0 0-3.7 11.8V17h7.4v-2.7A6.5 6.5 0 0 0 12 2.5Z"/></symbol>
+<symbol id="i-speaker" viewBox="0 0 24 24"><rect x="5" y="2.5" width="14" height="19" rx="3"/><circle cx="12" cy="15" r="3.5"/><circle cx="12" cy="7" r="1.4" fill="currentColor" stroke="none"/></symbol>
+<symbol id="i-camera" viewBox="0 0 24 24"><path d="M3 8.5A2.5 2.5 0 0 1 5.5 6h1.7l1.2-2h7.2l1.2 2h1.7A2.5 2.5 0 0 1 21 8.5v9A2.5 2.5 0 0 1 18.5 20h-13A2.5 2.5 0 0 1 3 17.5v-9Z"/><circle cx="12" cy="13" r="3.5"/></symbol>
+<symbol id="i-watch" viewBox="0 0 24 24"><circle cx="12" cy="12" r="6"/><path d="M12 9.5V12l1.8 1.2M9 6.5 8.6 2.5h6.8L15 6.5M9 17.5l-.4 4h6.8l-.4-4"/></symbol>
+<symbol id="i-cloud" viewBox="0 0 24 24"><path d="M7 18.5a4.5 4.5 0 0 1-.5-9 5.5 5.5 0 0 1 10.6 1.3A3.8 3.8 0 0 1 17 18.5H7Z"/></symbol>
+<symbol id="i-flask" viewBox="0 0 24 24"><path d="M9.5 3v6L4.5 18a2.4 2.4 0 0 0 2.1 3.5h10.8A2.4 2.4 0 0 0 19.5 18l-5-9V3"/><path d="M8 3h8M7.5 14h9"/></symbol>
+<symbol id="i-snake" viewBox="0 0 24 24"><path d="M6.5 5.5A2.5 2.5 0 0 1 9 3h6a2.5 2.5 0 0 1 2.5 2.5V9a2.5 2.5 0 0 1-2.5 2.5H9A2.5 2.5 0 0 0 6.5 14v4.5A2.5 2.5 0 0 0 9 21h6a2.5 2.5 0 0 0 2.5-2.5"/><circle cx="9.5" cy="6" r="1" fill="currentColor" stroke="none"/><circle cx="14.5" cy="18" r="1" fill="currentColor" stroke="none"/></symbol>
+<symbol id="i-spark" viewBox="0 0 24 24"><path d="M12 2.5 14 9l6.5 2-6.5 2-2 6.5-2-6.5L3.5 11 10 9l2-6.5Z"/></symbol>
+<symbol id="i-folder" viewBox="0 0 24 24"><path d="M3 6.5A2.5 2.5 0 0 1 5.5 4h3.2l2 2.5h7.8A2.5 2.5 0 0 1 21 9v8.5A2.5 2.5 0 0 1 18.5 20h-13A2.5 2.5 0 0 1 3 17.5v-11Z"/></symbol>
+<symbol id="i-mail" viewBox="0 0 24 24"><rect x="2.5" y="5" width="19" height="14" rx="2.5"/><path d="m3.5 7 8.5 6 8.5-6"/></symbol>
+<symbol id="i-x" viewBox="0 0 24 24"><path d="M3 3h4.2l5 6.7L17.6 3H21l-7.1 8.3L21.6 21h-4.2l-5.4-7.2L6 21H2.6l7.5-8.8L3 3Z" fill="currentColor" stroke="none"/></symbol>
+<symbol id="i-link" viewBox="0 0 24 24"><path d="M10 13.5a4 4 0 0 0 5.7 0l3-3a4 4 0 0 0-5.7-5.7l-1.3 1.3"/><path d="M14 10.5a4 4 0 0 0-5.7 0l-3 3a4 4 0 0 0 5.7 5.7l1.3-1.3"/></symbol>
+<symbol id="i-arrow" viewBox="0 0 24 24"><path d="M5 12h14M13 6l6 6-6 6"/></symbol>
+<symbol id="i-dl" viewBox="0 0 24 24"><path d="M12 4v12M7 11l5 5 5-5M5 20h14"/></symbol>
+<symbol id="i-up" viewBox="0 0 24 24"><path d="M12 20V8M7 13l5-5 5 5M5 4h14"/></symbol>
+</defs></svg>
+
+<header class="rh sr-only">
+  <span class="rh-name">𝒶𝓁𝒾𝓈</span> — inference systems, projects, writings, stack
+</header>
+
+<button class="themebtn" id="themebtn" type="button" aria-label="switch to dark mode">
+  <svg class="i sm"><use href="#i-cloud"/></svg><span>dark</span>
+</button>
+
+<div class="stage">
+  <div class="scene">
+    <div class="book" id="book">
+      <div class="cover-back" aria-hidden="true"></div>
+
+      <!-- ============ 01 · HOME ============ -->
+      <div class="spread" data-i="0" data-title="home">
+        <section class="page pl">
+          <p class="mono">P. 01</p>
+          <div class="me-wrap">
+            <div class="skyline" role="img" aria-label="Every bar is a day of study since June 2026, the tall one is a sixteen hour session."></div>
+            <span class="tape"></span>
+            <div class="polaroid mini">
+              <div class="ph"><img src="assets/me.png" alt="alis" loading="lazy"></div>
+              <div class="cap">me</div>
+            </div>
+          </div>
+          <p class="pen" style="margin:3px 0 0 2px;color:var(--grey)">every bar is a day i studied.</p>
+          <h1 class="name">𝒶𝓁𝒾𝓈</h1>
+          <p class="pen" style="margin-top:8px">alis · inference</p>
+          <p class="lead">I build and re-implement LLM inference systems.</p>
+          <p class="desc">attention mechanisms, memory management, serving engines.</p>
+          <div class="hr-dot"></div>
+          <p class="mono sec">currently</p>
+          <p class="desc">building my own inference engine based on vLLM</p>
+          <p class="mono sec">looking for</p>
+          <p class="desc">inference engineer roles / opportunities to contribute in inference</p>
+          <div class="pagefoot">
+            <p class="quietnav">
+              <a class="jump" href="#writings" data-to="writings">writings</a> ·
+              <a class="jump" href="#stack" data-to="stack">stack + say hi</a>
+            </p>
+            <div class="links">
+              <a href="https://github.com/softmaxxer101" target="_blank" rel="noopener">github</a>
+              <a href="https://x.com/import_alis" target="_blank" rel="noopener">x</a>
+              <a href="https://huggingface.co/softmaxxer101" target="_blank" rel="noopener">hugging face</a>
+              <a href="https://softmaxxer101.github.io/" target="_blank" rel="noopener">blog</a>
+            </div>
+          </div>
+        </section>
+        <section class="page pr">
+          <p class="mono">P. 02</p>
+          <h1 class="h1">the road <em>so far</em></h1>
+          <p class="pen">one GPU, a lot of paper.</p>
+          <ul class="joblist road">
+            <li>
+              <span class="yrs">IN<br>PROGRESS</span>
+              <div>
+                <h3>Building an inference engine <span class="badge">now</span></h3>
+                <p class="meta">vLLM internals · from first principles</p>
+                <ul class="ticks">
+                  <li>Inspired by vLLM internals</li>
+                  <li>Studying vLLM v1 architecture (paged KV-cache, continuous batching, scheduler)</li>
+                  <li>Implementing core components from first principles</li>
+                  <li>Exploring integration of v2 model runner</li>
+                  <li>Goal: a working engine, benchmarked and iterated toward something lightweight and slightly differentiated</li>
+                </ul>
+              </div>
+            </li>
+            <li>
+              <span class="yrs">SEP<br>2026</span>
+              <div>
+                <h3>Paged Attention, from the paper</h3>
+                <p class="meta">Pure PyTorch · write-up</p>
+                <ul class="ticks">
+                  <li>Block tables, physical/logical pages, no PagedAttention kernel</li>
+                  <li>Solved the memory-fragmentation question by measuring it, not guessing</li>
+                  <li>Turned the whole thing into a detailed PDF explanation</li>
+                </ul>
+              </div>
+            </li>
+            <li>
+              <span class="yrs">SEP<br>2026</span>
+              <div>
+                <h3>Qwen2.5-0.5B Inference &amp; Server Infrastructure</h3>
+                <p class="meta">wrapper · eval pipeline · streaming server</p>
+                <ul class="ticks">
+                  <li>Custom Python wrapper &amp; CLI: a native inference wrapper plus an interactive terminal chat interface</li>
+                  <li>Evaluation pipeline: structured benchmark runs for generation quality and response accuracy</li>
+                  <li>Streaming server: a FastAPI backend streaming real-time plain-text token outputs</li>
+                </ul>
+              </div>
+            </li>
+            <li>
+              <span class="yrs">JUL → AUG<br>2026</span>
+              <div>
+                <h3>Transformer, KV-Cache, DeepSeek MLA &amp; Sparse Attention</h3>
+                <p class="meta">implemented from research papers</p>
+                <p class="desc">Built the original Vaswani Transformer with low-level KV-caching, implemented DeepSeek-V2 MLA to compress KV matrices into low-rank latent vectors, then implemented DeepSeek's sparse attention from scratch.</p>
+              </div>
+            </li>
+          </ul>
+        </section>
+      </div>
+
+      <!-- ============ 02 · THINGS I DO ============ -->
+      <div class="spread" data-i="1" data-title="projects">
+        <section class="page pl">
+          <p class="mono">P. 03</p>
+          <h1 class="h1">things i <em>do</em></h1>
+          <p class="pen">re-implemented from the papers, not from a tutorial.</p>
+          <div class="folders" id="folders"></div>
+        </section>
+        <section class="page pr">
+          <p class="mono">P. 04</p>
+          <div class="projview" id="projview"></div>
+        </section>
+      </div>
+
+      <!-- ============ 03 · WRITINGS ============ -->
+      <div class="spread" data-i="2" data-title="writings">
+        <section class="page pl">
+          <p class="mono">P. 05</p>
+          <h1 class="h1">writings</h1>
+          <p class="mono count" id="wcount">4 notes</p>
+          <p class="desc">long-form notes only. the newest one sits on top, highlighted.</p>
+          <div class="feature" id="wfeature"></div>
+          <div class="hr-dot"></div>
+          <ul class="posts" id="wlist"></ul>
+        </section>
+        <section class="page pr">
+          <p class="mono sec">how i write</p>
+          <p class="desc">I read the paper. Write the code. Document the architecture. Deconstruct complex systems from the math to the script.</p>
+          <p class="desc">The gap between a heavy research paper and a working PyTorch script is huge. I write to bridge that gap. These notes track the exact steps of turning raw formulas into functional architectures.</p>
+          <div class="sticky">
+            <span class="tape"></span>
+            <p class="hand">i write everything down. if it isn't explained, i didn't understand it.</p>
+          </div>
+          <div class="sticky s2">
+            <span class="tape"></span>
+            <p class="hand">open-sourcing my thought process, from formulas to pytorch.</p>
+          </div>
+          <div class="sticky s3">
+            <span class="tape"></span>
+            <p class="hand">distilling heavy arxiv papers into clean pytorch scripts.</p>
+          </div>
+        </section>
+      </div>
+
+      <!-- ============ 04 · STACK + SAY HI ============ -->
+      <div class="spread" data-i="3" data-title="stack">
+        <section class="page pl">
+          <p class="mono">P. 07</p>
+          <h1 class="h1">technical <em>stack</em></h1>
+          <div class="stackrows" id="stackrows"></div>
+          <p class="mono sec">hardware</p>
+          <ul class="hwrow">
+            <li><span class="ph"><svg class="i"><use href="#i-chip"/></svg></span><b id="hardware">NVIDIA RTX 3050 6GB</b></li>
+          </ul>
+        </section>
+        <section class="page pr">
+          <p class="mono">P. 08</p>
+          <p class="mono sec">say hi</p>
+          <ul class="sayhi" id="sayhi"></ul>
+          <div class="hr-dot"></div>
+          <p class="mono sec">dear alis</p>
+          <p class="dear">thanks for stopping by.<br>if you're working on inference systems or hiring for them, just say hi.</p>
+          <form class="letter" id="letter" novalidate>
+            <label class="line"><span>i'm</span><input name="from" placeholder="who you are" autocomplete="name"></label>
+            <label class="line"><span>write back at</span><input name="email" type="email" placeholder="you@example.com" autocomplete="email"></label>
+            <label class="msg"><span class="hand">your message</span><textarea name="msg" rows="3" placeholder="what you're building, or what you want me to break next"></textarea></label>
+            <div class="letterfoot">
+              <span class="hand">yours, you</span>
+              <button type="submit" class="send">send <svg class="i sm"><use href="#i-arrow"/></svg></button>
+            </div>
+          </form>
+          <div class="sent" id="sent" hidden>
+            <p class="mono" id="sentstate">delivered · to alis</p>
+            <p class="desc" id="sentmsg">it is in the inbox now.</p>
+            <a class="linksent" id="sentmail" href="#">or send it from your own mail app</a>
+            <button class="tidy" id="again" type="button">write another →</button>
+          </div>
+        </section>
+      </div>
+
+      <div class="binding" aria-hidden="true"></div>
+
+      <nav class="tabs" aria-label="sections"></nav>
+    </div>
+  </div>
+</div>
+
+<div class="spinebar">
+  <button class="navbtn" id="prevBtn" type="button" aria-label="previous page"><svg class="i"><use href="#i-dl"/></svg></button>
+  <div class="spineTab" id="spineTab"><svg class="i sm" id="spineIcon"><use href="#i-book"/></svg><span id="spineLabel">home</span></div>
+  <span class="counter" id="counter">1 / 4</span>
+  <button class="navbtn" id="nextBtn" type="button" aria-label="next page"><svg class="i"><use href="#i-up"/></svg></button>
+</div>
+<p class="swipehint" id="swipehint">swipe up or tap <b>↑</b></p>
+
+<div class="flip" id="flip" aria-hidden="true"><div class="flipinner"></div></div>
+
+<script src="app.js?v=24"></script>
+</body>
+</html>

@@ -86,12 +86,12 @@ mailto hand-off.
 
 - **Every link is the specific thing, not a profile.** Each writing opens its own
   PDF or blog post. Change the `href` / `url` on the entry in `app.js` to repoint one.
-- The **Inference Engine** entry has no repo yet, so its detail panel shows a quiet
-  "code coming soon" instead of a link. Give it an `href` in the `PROJECTS` array
-  when the repo exists.
+- The **Inference Engine** entry has no public repo, so its detail panel shows a quiet
+  note instead of a link. Give it an `href` in the `PROJECTS` array when it goes public.
+- **Agentic Serving Lab** is first in `PROJECTS` and marked `feat:true`; its road card
+  is in `index.html`, and its Phase 2 report is the newest `WRITINGS` entry (highlighted).
 - The **home-page photo** is `assets/me.png`, shown inside the polaroid. Swap that file to change it.
 - Fonts (Fraunces, Hanken Grotesk, Caveat, JetBrains Mono) come from Google Fonts.
 - The page grid, red margin rule, punch holes and spiral rings are pure CSS.
 - Every page is measured to fit its 544×756 sheet with no clipping — if you add
   copy and something looks cut off, that is the reason.
-# softmaxxer101.github.io

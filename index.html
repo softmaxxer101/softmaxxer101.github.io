@@ -4,7 +4,7 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>𝒶𝓁𝒾𝓈 · inference journal</title>
-<meta name="description" content="alis — I build and re-implement LLM inference systems. Attention mechanisms, memory management, serving engines, on a single RTX 3050.">
+<meta name="description" content="alis — I build and re-implement LLM inference systems: attention, memory management, serving engines and agentic workloads, measured on a single RTX 3050.">
 <meta name="theme-color" content="#ece7dd">
 <meta name="color-scheme" content="light dark">
 <link rel="canonical" href="https://softmaxxer101.github.io/">
@@ -17,7 +17,7 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,100..900;1,9..144,100..900&family=Hanken+Grotesk:ital,wght@0,100..900;1,100..900&family=Caveat:wght@400..700&family=JetBrains+Mono:ital,wght@0,100..800;1,100..800&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="styles.css?v=24">
+<link rel="stylesheet" href="styles.css?v=28">
 <script>try{if(localStorage.getItem('alis-theme')==='dark')document.documentElement.setAttribute('data-theme','dark')}catch(e){}</script>
 <script type="application/ld+json">
 {"@context":"https://schema.org","@type":"Person","name":"alis","alternateName":"𝒶𝓁𝒾𝓈","url":"https://softmaxxer101.github.io/","jobTitle":"LLM Inference Engineer","description":"Self-taught LLM systems engineer re-implementing modern inference techniques from first principles.","sameAs":["https://github.com/softmaxxer101","https://x.com/import_alis","https://huggingface.co/softmaxxer101"]}
@@ -92,12 +92,12 @@
           <h1 class="name">𝒶𝓁𝒾𝓈</h1>
           <p class="pen" style="margin-top:8px">alis · inference</p>
           <p class="lead">I build and re-implement LLM inference systems.</p>
-          <p class="desc">attention mechanisms, memory management, serving engines.</p>
+          <p class="desc">attention, memory management, serving engines, agentic workloads.</p>
           <div class="hr-dot"></div>
-          <p class="mono sec">currently</p>
-          <p class="desc">building my own inference engine based on vLLM</p>
+          <p class="mono sec">focus</p>
+          <p class="desc">Inference systems, serving efficiency, and production deployment.</p>
           <p class="mono sec">looking for</p>
-          <p class="desc">inference engineer roles / opportunities to contribute in inference</p>
+          <p class="desc">inference engineer roles / inference systems work.</p>
           <div class="pagefoot">
             <p class="quietnav">
               <a class="jump" href="#writings" data-to="writings">writings</a> ·
@@ -115,51 +115,50 @@
           <p class="mono">P. 02</p>
           <h1 class="h1">the road <em>so far</em></h1>
           <p class="pen">one GPU, a lot of paper.</p>
+
+          <div class="roadfeat">
+            <div class="rf-top">
+              <span class="badge">featured</span>
+              <span class="rf-when">NOV 2026 · COMPLETED</span>
+            </div>
+            <h3>Agentic Serving Lab <span class="badge done">3 phases</span></h3>
+            <p class="meta">Qwen3-0.6B → Qwen3.8-27B-NVFP4 · RTX 3050 → 2× RTX 5090</p>
+            <ul class="ticks">
+              <li>Phase 0 — a custom request harness on Qwen3-0.6B, RTX 3050 6 GB</li>
+              <li>Phase 1 — trie-structured harness reproduction, same model and hardware</li>
+              <li>Phase 2 — scaled to Qwen3.8-27B-NVFP4 on dual RTX 5090s via Vast.ai</li>
+            </ul>
+            <div class="roadlinks">
+              <a href="https://github.com/softmaxxer101/agentic-serving" target="_blank" rel="noopener">github</a>
+              <a href="https://softmaxxer101.github.io/agentic-serving/agentic-serving-phase1.pdf" target="_blank" rel="noopener">phase 0 report</a>
+              <a href="https://softmaxxer101.github.io/agentic-serving/agentic-serving-phase2.pdf" target="_blank" rel="noopener">phase 2 report</a>
+            </div>
+          </div>
+
           <ul class="joblist road">
             <li>
-              <span class="yrs">IN<br>PROGRESS</span>
+              <span class="yrs">2026</span>
               <div>
-                <h3>Building an inference engine <span class="badge">now</span></h3>
+                <h3>Custom inference engine <span class="badge">completed</span></h3>
                 <p class="meta">vLLM internals · from first principles</p>
-                <ul class="ticks">
-                  <li>Inspired by vLLM internals</li>
-                  <li>Studying vLLM v1 architecture (paged KV-cache, continuous batching, scheduler)</li>
-                  <li>Implementing core components from first principles</li>
-                  <li>Exploring integration of v2 model runner</li>
-                  <li>Goal: a working engine, benchmarked and iterated toward something lightweight and slightly differentiated</li>
-                </ul>
+                <p class="desc">Studied the vLLM v1 architecture — paged KV-cache, continuous batching, the scheduler — and implemented the core components myself. A working engine, not a wrapper.</p>
               </div>
             </li>
             <li>
-              <span class="yrs">SEP<br>2026</span>
+              <span class="yrs">2026</span>
               <div>
-                <h3>Paged Attention, from the paper</h3>
-                <p class="meta">Pure PyTorch · write-up</p>
-                <ul class="ticks">
-                  <li>Block tables, physical/logical pages, no PagedAttention kernel</li>
-                  <li>Solved the memory-fragmentation question by measuring it, not guessing</li>
-                  <li>Turned the whole thing into a detailed PDF explanation</li>
-                </ul>
+                <h3>LLM inference gateway <span class="badge">completed</span></h3>
+                <p class="meta">admission control · queueing · SLAs</p>
+                <p class="desc">A FastAPI gateway in front of vLLM: bounded queues, queue deadlines, upstream timeouts, SLA-aware admission, JSONL logs and Prometheus metrics.</p>
+                <p class="roadmini"><a href="https://github.com/softmaxxer101/inference_gateway" target="_blank" rel="noopener">code</a> · <a href="https://softmaxxer101.github.io/inference_gateway/" target="_blank" rel="noopener">site</a> · <a href="https://softmaxxer101.github.io/inference_gateway/blog1.pdf" target="_blank" rel="noopener">blog 1</a> · <a href="https://softmaxxer101.github.io/inference_gateway/blog2.pdf" target="_blank" rel="noopener">blog 2</a></p>
               </div>
             </li>
             <li>
-              <span class="yrs">SEP<br>2026</span>
+              <span class="yrs">JUL → SEP<br>2026</span>
               <div>
-                <h3>Qwen2.5-0.5B Inference &amp; Server Infrastructure</h3>
-                <p class="meta">wrapper · eval pipeline · streaming server</p>
-                <ul class="ticks">
-                  <li>Custom Python wrapper &amp; CLI: a native inference wrapper plus an interactive terminal chat interface</li>
-                  <li>Evaluation pipeline: structured benchmark runs for generation quality and response accuracy</li>
-                  <li>Streaming server: a FastAPI backend streaming real-time plain-text token outputs</li>
-                </ul>
-              </div>
-            </li>
-            <li>
-              <span class="yrs">JUL → AUG<br>2026</span>
-              <div>
-                <h3>Transformer, KV-Cache, DeepSeek MLA &amp; Sparse Attention</h3>
-                <p class="meta">implemented from research papers</p>
-                <p class="desc">Built the original Vaswani Transformer with low-level KV-caching, implemented DeepSeek-V2 MLA to compress KV matrices into low-rank latent vectors, then implemented DeepSeek's sparse attention from scratch.</p>
+                <h3>Papers into PyTorch</h3>
+                <p class="meta">paged attention · MLA · sparse attention</p>
+                <p class="desc">Paged Attention from the paper with a detailed PDF, a Qwen2.5-0.5B wrapper with an eval pipeline and streaming server, the original Transformer with KV-cache, DeepSeek-V2 MLA and sparse attention — all re-implemented and measured.</p>
               </div>
             </li>
           </ul>
@@ -173,6 +172,7 @@
           <h1 class="h1">things i <em>do</em></h1>
           <p class="pen">re-implemented from the papers, not from a tutorial.</p>
           <div class="folders" id="folders"></div>
+          <p class="pen" style="margin-top:auto;font-size:18px">pick one — each one says what it measured.</p>
         </section>
         <section class="page pr">
           <p class="mono">P. 04</p>
@@ -217,9 +217,8 @@
           <h1 class="h1">technical <em>stack</em></h1>
           <div class="stackrows" id="stackrows"></div>
           <p class="mono sec">hardware</p>
-          <ul class="hwrow">
-            <li><span class="ph"><svg class="i"><use href="#i-chip"/></svg></span><b id="hardware">NVIDIA RTX 3050 6GB</b></li>
-          </ul>
+          <ul class="hwrow" id="hwrow"></ul>
+          <p class="desc hwnote">Local work stays inside 6 GiB. The 27B scale-up was rented by the hour on Vast.ai and kept under $20.</p>
         </section>
         <section class="page pr">
           <p class="mono">P. 08</p>
@@ -263,6 +262,6 @@
 
 <div class="flip" id="flip" aria-hidden="true"><div class="flipinner"></div></div>
 
-<script src="app.js?v=24"></script>
+<script src="app.js?v=29"></script>
 </body>
 </html>

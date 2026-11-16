@@ -32,90 +32,103 @@ const SECTIONS = [
   { key:'stack',    label:'stack + say hi', icon:'i-chip'  }
 ];
 
-/* exact project short descriptions from the brief.
-   href:null renders a quiet "code coming soon" instead of a link. */
+/* featured first — the folder grid and the detail panel both read this order.
+   href:null renders a quiet note instead of a link. */
 const PROJECTS = [
-  { n:'Inference Engine', tag:'in progress', c:'#c9e4f7', i:'i-rocket',
-    blurb:'Building my own inference engine based on vLLM — inspired by the internals, written from first principles and aiming to benchmark its way toward a lightweight, slightly differentiated engine.',
-    href:null },
+  { n:'Agentic Serving Lab', short:'Agentic Serving', tag:'agentic serving · 3 phases', c:'#fbe38a', i:'i-flask', feat:true,
+    blurb:'A three-phase study of multi-step agentic LLM serving, completed November 2026. Phase 0 built a custom request harness around Qwen3-0.6B on one 6 GiB RTX 3050; Phase 1 reproduced the workload with a trie-structured harness; Phase 2 scaled it to Qwen3.8-27B-NVFP4 on dual RTX 5090s via Vast.ai. Every phase is logged as JSONL and reported — latency, throughput and queueing under admission control, including the runs that did not behave.',
+    href:'https://github.com/softmaxxer101/agentic-serving',
+    links:[
+      { t:'phase 2 dashboard', href:'https://softmaxxer101.github.io/agentic-serving/phase-2/index.html' },
+      { t:'phase 0 report', href:'https://softmaxxer101.github.io/agentic-serving/agentic-serving-phase1.pdf' },
+      { t:'phase 2 report', href:'https://softmaxxer101.github.io/agentic-serving/agentic-serving-phase2.pdf' }
+    ] },
 
-  { n:'PagedAttention from Scratch', tag:'pure pytorch', c:'#d6cbf6', i:'i-db',
-    blurb:'Pure PyTorch implementation of Paged Attention with a detailed write-up, completed in five days. Fixed 16-token KV blocks, per-sequence block tables, free-block tracking, token appending and online blockwise softmax — verified against dense attention.',
+  { n:'Inference Engine', tag:'vLLM internals · completed', c:'#c9e4f7', i:'i-rocket',
+    blurb:'A vLLM-based inference engine built from first principles and completed this year. I studied the vLLM v1 architecture — paged KV-cache with block tables, continuous batching, the scheduler — then implemented the core components rather than wrapping the library. It runs end to end, which is the only way I trust a claim about memory or scheduling.',
+    href:'https://github.com/softmaxxer101/qwenchana' },
+
+  { n:'Inference Gateway', tag:'admission control · completed', c:'#bfe7e1', i:'i-terminal',
+    blurb:'A FastAPI gateway in front of vLLM, built to make admission control measurable. Bounded queues, queue deadlines, upstream timeouts, per-request JSONL logs and Prometheus metrics, then SLA-aware admission on top. The two write-ups follow one decision at a time: what the queue did, and what changed when the policy did.',
+    href:'https://github.com/softmaxxer101/inference_gateway',
+    links:[
+      { t:'project site', href:'https://softmaxxer101.github.io/inference_gateway/' },
+      { t:'blog 1', href:'https://softmaxxer101.github.io/inference_gateway/blog1.pdf' },
+      { t:'blog 2', href:'https://softmaxxer101.github.io/inference_gateway/blog2.pdf' }
+    ] },
+
+  { n:'vLLM Workbench', tag:'serving experiments', c:'#e3e0d8', i:'i-doc',
+    blurb:'Hands-on vLLM work: serving Qwen through the OpenAI-compatible API, varying concurrency, reading KV-cache logs, and benchmarking streaming TTFT, TPOT, total latency and throughput against Transformers. Also holds the Qwen2.5-0.5B wrapper and CLI, an evaluation pipeline, and a FastAPI server that streams tokens back as plain text.',
+    href:'https://github.com/softmaxxer101/vllm-workbench' },
+
+  { n:'PagedAttention from Scratch', short:'PagedAttention', tag:'pure pytorch', c:'#d6cbf6', i:'i-db',
+    blurb:'Paged Attention implemented from the paper in pure PyTorch: fixed 16-token KV blocks, per-sequence block tables, free-block tracking, token appends and online blockwise softmax, verified against dense attention. The accompanying PDF works through the block table and the memory-fragmentation question with measurements instead of guesses.',
     href:'https://github.com/softmaxxer101/vllm_architecture',
     writeup:'https://softmaxxer101.github.io/vllm_architecture/paged_attention.pdf' },
 
-  { n:'vLLM Deep Study & Experiments', tag:'systems', c:'#e3e0d8', i:'i-doc',
-    blurb:'Hands-on exploration of vLLM architecture, serving and performance: setup, Qwen serving, the OpenAI-compatible API, concurrency, KV-cache logs and Transformers vs vLLM. Studied PagedAttention, chunked/disaggregated prefill, prefix caching, continuous batching and multi-step scheduling, then benchmarked streaming TTFT, TPOT, total latency, token throughput and concurrency with Qwen2.5-0.5B-Instruct.',
-    href:'https://github.com/softmaxxer101/vllm_experiments' },
-
-  { n:'Streaming FastAPI Server', tag:'serving', c:'#bfe7e1', i:'i-terminal',
-    blurb:'A FastAPI wrapper around Qwen2.5-0.5B with /health, /chat and /chat/stream endpoints, conversation history and temperature, top-p and max-token controls. Uses the OpenAI client to talk to a vLLM server and streams response chunks back as plain text.',
-    href:'https://github.com/softmaxxer101/vllm_experiments' },
-
-  { n:'Speculative Decoding', tag:'decoding', c:'#fbe38a', i:'i-bolt',
-    blurb:'Speculative decoding on sample sequences: a small draft model proposes candidate tokens and a target model verifies them in parallel. Uses rejection sampling on target/draft probabilities, residual distribution sampling, and boundary correction when all draft tokens are accepted.',
-    href:'https://github.com/softmaxxer101/speculative_decoding' },
-
-  { n:'DeepSeek MLA', tag:'attention', c:'#f8b39b', i:'i-layers',
-    blurb:'A re-implementation of Multi-head Latent Attention that compresses queries and KV states into a 128-dimensional latent space. Separate RoPE components, compressed KV caching, key/value reconstruction, attention over cached sequences, and a comparison of per-token cache cost against standard MHA.',
+  { n:'DeepSeek MLA', tag:'attention · latent kv', c:'#f8b39b', i:'i-layers',
+    blurb:'Multi-head Latent Attention from DeepSeek-V2: queries and KV states compressed into a 128-dimensional latent space, separate RoPE components, compressed KV caching and key/value reconstruction. Compares per-token cache cost against standard multi-head attention.',
     href:'https://github.com/softmaxxer101/deepseek-mla' },
 
-  { n:'KV-Cache', tag:'attention', c:'#dcee9c', i:'i-grid',
-    blurb:'KV-cache inside Multi-head Attention: Q/K/V projected across 16 heads with persistent key/value caches during token-by-token generation, attending only over cached history instead of recomputing. Benchmarks cached attention against full recomputation — latency, throughput, GPU memory, speedup and plots.',
-    href:'https://github.com/softmaxxer101/kv-cache' },
-
-  { n:'alisLM', tag:'small model', c:'#f6cfd9', i:'i-brain',
-    blurb:'A transparent, zero-framework-overhead Small Language Model (SmallLM) implementation based on the Qwen architecture. Built to demonstrate first-principles LLM inference, memory-bound decoding optimization, and custom KV-cache management on resource-constrained hardware.',
-    href:'https://github.com/softmaxxer101/alislm' },
-
-  { n:'Transformer', tag:'from scratch', c:'#f8b39b', i:'i-book',
-    blurb:'A toy encoder-decoder Transformer: multi-head self-attention, optional causal masking, residual connections, LayerNorm, ReLU feed-forward layers, encoder cross-attention, decoder masked self-attention and a final softmax output projection.',
+  { n:'Transformer with KV-Cache', short:'Transformer + KV', tag:'from scratch', c:'#dcee9c', i:'i-grid',
+    blurb:'The original Transformer with multi-head self-attention, residual connections, LayerNorm and encoder cross-attention, extended with a low-level KV-cache so decoding attends only over cached history. Benchmarked against full recomputation for latency, throughput and GPU memory.',
     href:'https://github.com/softmaxxer101/transformer' },
 
-  { n:'Quantization', tag:'int8 · ptq', c:'#dcee9c', i:'i-flask',
-    blurb:'8-bit quantization experiments across symmetric/asymmetric schemes and per-tensor, per-channel and per-group granularity, with range selection by min-max, percentile, MSE and cross-entropy. Includes a toy post-training quantized PyTorch MLP with per-channel INT8 weights and dynamic input quantization, scored on quantization error and top-k ordering.',
-    href:'https://github.com/softmaxxer101/quantization' },
-
-  { n:'DeepSeek Sparse Attention', tag:'attention · top-k', c:'#f6cfd9', i:'i-spark',
-    blurb:'A PyTorch prototype of MLA/MQA-style sparse attention with compressed KV-cache. Implements RoPE, a ReLU-gated Lightning Indexer, top-k token selection, separate indexer keys and attention over the selected KV entries — top four in the toy setup.',
+  { n:'DeepSeek Sparse Attention', short:'Sparse Attention', tag:'top-k · lightning indexer', c:'#f6cfd9', i:'i-spark',
+    blurb:'DeepSeek\u2019s sparse attention as a PyTorch prototype: MLA/MQA-style compressed KV-cache, RoPE, a ReLU-gated Lightning Indexer and top-k token selection before attention. Measures what the indexer costs against what the sparsity saves.',
     href:'https://github.com/softmaxxer101/deepseek-sparse-attention' }
 ];
 
 /* newest first — the first entry is highlighted automatically.
    add a new post anywhere and it re-sorts itself into place. */
 const WRITINGS = [
+  { iso:'2026-11-20', d:'NOV 2026', len:'PDF', cta:'read the report',
+    t:'Agentic Serving Lab — Phase 2 report',
+    note:'Qwen3.8-27B-NVFP4 on dual RTX 5090s: the scale-up, the serving numbers, and what the measurements changed.',
+    url:'https://softmaxxer101.github.io/agentic-serving/agentic-serving-phase2.pdf' },
+  { iso:'2026-11-05', d:'NOV 2026', len:'PDF', cta:'read the report',
+    t:'Agentic Serving Lab — Phase 0 report',
+    note:'the trie harness on Qwen3-0.6B and one 6 GB GPU: workload, queueing, admission control.',
+    url:'https://softmaxxer101.github.io/agentic-serving/agentic-serving-phase1.pdf' },
+  { iso:'2026-10-10', d:'OCT 2026', len:'PDF',
+    t:'Inference Gateway — blog 2',
+    note:'SLA-aware admission: what the queue did once the policy changed.',
+    url:'https://softmaxxer101.github.io/inference_gateway/blog2.pdf' },
+  { iso:'2026-09-26', d:'OCT 2026', len:'PDF',
+    t:'Inference Gateway — blog 1',
+    note:'bounded queues, queue deadlines and upstream timeouts.',
+    url:'https://softmaxxer101.github.io/inference_gateway/blog1.pdf' },
   { iso:'2026-09-22', d:'SEP 2026', len:'PDF',
-    t:'Paged-Attention explained + pure PyTorch implementation',
-    note:'the whole thing, block table and online softmax, written up properly',
+    t:'Paged Attention, from the paper',
+    note:'the block table and online softmax, written up with measurements.',
     url:'https://softmaxxer101.github.io/vllm_architecture/paged_attention.pdf' },
   { iso:'2026-07-31', d:'JUL 2026', len:'blog',
     t:'DeepSeek MLA, from the formulas up',
-    note:'compressing the KV cache into a latent space',
+    note:'compressing the KV cache into a latent space.',
     url:'https://alisintensorland.blogspot.com/2026/07/deepseek-v2-multi-head-latent-attention.html' },
   { iso:'2026-07-28', d:'JUL 2026', len:'blog',
     t:'KV-cache — a question or a solution?',
-    note:'why decoding is memory bound',
-    url:'https://alisintensorland.blogspot.com/2026/07/kv-cache-question-or-solution-i-bet.html' },
-  { iso:'2026-07-22', d:'JUL 2026', len:'blog',
-    t:'WTF is a Transformer…',
-    note:'the paper, in plain language',
-    url:'https://alisintensorland.blogspot.com/2026/07/wtf-is-transformer-you-must-be-familiar.html' }
+    note:'why decoding is memory bound.',
+    url:'https://alisintensorland.blogspot.com/2026/07/kv-cache-question-or-solution-i-bet.html' }
 ];
 
 const STACK = [
-  { k:'Languages',                     v:'Python · C · C++' },
-  { k:'Machine Learning & Deep Learning', v:'PyTorch · Hugging Face Transformers' },
-  { k:'LLM Inference & Serving',       v:'vLLM · FastAPI' },
-  { k:'Programming & Acceleration',    v:'CUDA · Triton' },
-  { k:'Specialized Expertise',         v:'High-performance LLM inference · Paged Attention &amp; KV Cache management · Post-Training Quantization · Speculative Decoding · Multi-head Latent Attention (MLA)' }
+  { k:'Language',                 v:'Python' },
+  { k:'Inference & models',       v:'PyTorch · vLLM' },
+  { k:'Serving & APIs',           v:'FastAPI · Uvicorn · httpx' },
+  { k:'Measurement',              v:'JSONL structured logging · Prometheus metric scraping' },
+  { k:'Environment',              v:'Linux · WSL Ubuntu' }
 ];
-const HARDWARE = 'NVIDIA RTX 3050 6GB';
+const HARDWARE = [
+  { b:'NVIDIA RTX 3050 Laptop GPU', s:'6 GiB VRAM · every local baseline' }
+];
 
 const CONTACTS = [
   { k:'email',        v:DISPLAY_EMAIL,          href:'mailto:' + DISPLAY_EMAIL, ic:'i-mail'   },
   { k:'x',            v:'@import_alis',         href:X_URL,                     ic:'i-x'      },
   { k:'github',       v:'softmaxxer101',        href:GITHUB,                    ic:'i-branch' },
   { k:'huggingface',  v:'softmaxxer101',        href:HF,                        ic:'i-brain'  },
+  { k:'linkedin',     v:'in/softmaxxer101',     href:'https://www.linkedin.com/in/softmaxxer101', ic:'i-link' },
   { k:'blog',         v:'softmaxxer101.github.io', href:BLOG,                   ic:'i-book'   }
 ];
 
@@ -135,7 +148,7 @@ function render(){
   fol.innerHTML = PROJECTS.map((p, i) => `
     <button class="folder${i === 0 ? ' on' : ''}" data-i="${i}" type="button">
       <span class="ficon" style="background:linear-gradient(160deg,rgba(255,255,255,.5),${p.c})">${ico(p.i)}</span>
-      <b>${p.n}</b>
+      <b>${p.short || p.n}</b>
     </button>`).join('');
   fol.addEventListener('click', e => {
     const b = e.target.closest('.folder'); if (!b) return;
@@ -152,14 +165,15 @@ function render(){
     <p class="mono">newest · ${newest.d} · ${newest.len}</p>
     <h3>${newest.t}</h3>
     <p>${newest.note}</p>
-    <a href="${newest.url}" target="_blank" rel="noopener">read it here ${ico('i-arrow', 'i sm')}</a>`;
+    <a href="${newest.url}" target="_blank" rel="noopener">${newest.cta || 'read it here'} ${ico('i-arrow', 'i sm')}</a>`;
   $('#wlist').innerHTML = sorted.map((p, i) => `<li class="${i === 0 ? 'is-new' : ''}"><a href="${p.url}" target="_blank" rel="noopener">
       <time>${p.d}</time><b>${p.t}</b>${i === 0 ? '<span class="newtag">newest</span>' : ''}<span class="len">${p.len}</span></a></li>`).join('');
 
   /* stack */
   $('#stackrows').innerHTML = STACK.map(r =>
     `<div class="strow"><h4>${r.k}</h4><p>${r.v}</p></div>`).join('');
-  $('#hardware').textContent = HARDWARE;
+  $('#hwrow').innerHTML = HARDWARE.map(h =>
+    `<li><span class="ph">${ico('i-chip')}</span><div><b>${h.b}</b><span>${h.s}</span></div></li>`).join('');
 
   /* say hi */
   $('#sayhi').innerHTML = CONTACTS.map(c =>
@@ -174,18 +188,17 @@ function render(){
 
 function showProject(i){
   const p = PROJECTS[i], v = $('#projview');
-  const code = p.href
-    ? `<a class="go" href="${p.href}" target="_blank" rel="noopener">see the code ${ico('i-arrow', 'i sm')}</a>`
-    : `<span class="go muted">code coming soon</span>`;
-  const writeup = p.writeup
-    ? `<a class="go alt" href="${p.writeup}" target="_blank" rel="noopener">${ico('i-dl', 'i sm')} read the write-up</a>`
-    : '';
+  const links = [];
+  if (p.href) links.push(`<a class="go" href="${p.href}" target="_blank" rel="noopener">${p.codeLabel || 'see the code'} ${ico('i-arrow', 'i sm')}</a>`);
+  if (p.writeup) links.push(`<a class="go alt" href="${p.writeup}" target="_blank" rel="noopener">${ico('i-dl', 'i sm')} read the write-up</a>`);
+  (p.links || []).forEach(l => links.push(`<a class="go alt" href="${l.href}" target="_blank" rel="noopener">${l.t}</a>`));
+  const row = links.length ? links.join('') : `<span class="go muted">${p.note || 'code coming soon'}</span>`;
   v.innerHTML = `<div class="pv">
     <p class="mono">${String(i + 1).padStart(2, '0')} / ${String(PROJECTS.length).padStart(2, '0')}</p>
     <h2>${p.n}</h2>
-    <span class="tag">${p.tag}</span>
+    <span class="tag">${p.tag}</span>${p.feat ? ' <span class="tag feat">featured</span>' : ''}
     <p>${p.blurb}</p>
-    <div class="gorow">${code}${writeup}</div>
+    <div class="gorow">${row}</div>
   </div>`;
 }
 
